@@ -167,4 +167,28 @@ public class Hardware {
                                  DistanceUnit distUnit, AngleUnit angleUnit) {
         // Optional
     }
+
+    // =====================================================
+    // ENGINEERING PORTFOLIO PROMPT
+    // =====================================================
+    /*
+     * Engineering Portfolio Prompt – Hardware Abstraction Class
+     *
+     * After completing this scaffold, answer the following in your engineering notebook:
+     *
+     * 1. Why is it valuable to separate hardware initialization and configuration into its own class
+     *    instead of putting everything directly inside the OpMode?
+     *
+     * 2. What are the advantages and disadvantages of making motor directions and Pinpoint offsets
+     *    constants at the top of the class rather than hard-coding them inside the methods?
+     *
+     * 3. When implementing field-centric driving, why must we use radians (instead of degrees)
+     *    when rotating the axial and lateral inputs? What would happen if we used degrees by mistake?
+     *
+     * 4. How does exposing methods like isPinpointReady() and recalibratePinpoint() support
+     *    better autonomous reliability? Give one specific example of how you might use them.
+     *
+     * 5. (Design Process) If you had to explain this hardware class to a new team member,
+     *    what would be the three most important concepts you would emphasize? Why?
+     */
 }

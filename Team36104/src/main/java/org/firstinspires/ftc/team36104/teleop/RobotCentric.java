@@ -34,4 +34,28 @@ public class RobotCentric extends OpMode {
         telemetry.addData("Mode", "Robot Centric");
         telemetry.update();
     }
+
+    // =====================================================
+    // ENGINEERING PORTFOLIO PROMPT
+    // =====================================================
+    /*
+     * Engineering Portfolio Prompt – Robot Centric TeleOp
+     *
+     * After completing this scaffold, answer the following in your engineering notebook:
+     *
+     * 1. Why is it important to call updatePose() every loop iteration before reading
+     *    position or heading data from the Pinpoint?
+     *
+     * 2. What is the purpose of separating the drive logic into its own hardware class
+     *    instead of writing the mecanum math directly inside the TeleOp?
+     *
+     * 3. How does adding clear telemetry (drive powers + pose data) help with debugging
+     *    and driver practice? Give one specific example.
+     *
+     * 4. (Design Process) If you were to improve this TeleOp in the future, what is one
+     *    change you would make and why?
+     *
+     * 5. How does practicing in Robot Centric mode first help you better understand
+     *    Field Centric driving later?
+     */
 }

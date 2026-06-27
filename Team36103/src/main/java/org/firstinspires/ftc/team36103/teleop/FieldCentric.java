@@ -34,4 +34,28 @@ public class FieldCentric extends OpMode {
         telemetry.addData("Mode", "Field Centric");
         telemetry.update();
     }
+
+    // =====================================================
+    // ENGINEERING PORTFOLIO PROMPT
+    // =====================================================
+    /*
+     * Engineering Portfolio Prompt – Field Centric TeleOp
+     *
+     * After completing this scaffold, answer the following in your engineering notebook:
+     *
+     * 1. What is the main difference between Robot Centric and Field Centric driving
+     *    from the driver’s perspective?
+     *
+     * 2. Why do we need to use the robot’s current heading when implementing field-centric
+     *    control? What problem does this solve?
+     *
+     * 3. How does the field-centric implementation build on top of the robot-centric method
+     *    in the hardware class?
+     *
+     * 4. Which driving mode do you think will be more useful during a match and why?
+     *    (Consider game elements, driver preference, and reliability.)
+     *
+     * 5. (Iteration) After testing both modes, what is one improvement you would make
+     *    to either TeleOp and why?
+     */
 }

@@ -4,3 +4,5 @@ plugins {
 include ':FtcRobotController'
 include ':Team00000'
 include ':Team31192'
+include ':Team36103'
+include ':Team36104'

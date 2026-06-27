@@ -148,13 +148,14 @@ public class Hardware {
      * ===================================================== */
 
     /**
-     * Drives the robot holonomically using mecanum kinematics
+     * Drives the robot in a **robot-centric** manner.
+     * Movement is relative to the robot's current orientation.
      *
      * @param axial   Forward (+) / backward (-) power [-1.0, 1.0]
      * @param lateral Left (+) / right (-) strafe power [-1.0, 1.0]
      * @param yaw     Clockwise (+) / counter-clockwise (-) rotation power [-1.0, 1.0]
      */
-    public void driveRobot(double axial, double lateral, double yaw) {
+    public void driveRobotCentric(double axial, double lateral, double yaw) {
         double frontLeftPower  = axial + lateral + yaw;
         double frontRightPower = axial - lateral - yaw;
         double backLeftPower   = axial - lateral + yaw;
@@ -177,6 +178,25 @@ public class Hardware {
         }
 
         setDrivePower(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+    }
+
+    /**
+     * Drives the robot in a **field-centric** manner.
+     * "Forward" on the joystick always moves the robot toward the positive Y-axis on the field,
+     * regardless of the robot's current rotation.
+     *
+     * @param axial   Forward (+) / backward (-) power relative to the field [-1.0, 1.0]
+     * @param lateral Left (+) / right (-) strafe power relative to the field [-1.0, 1.0]
+     * @param yaw     Clockwise (+) / counter-clockwise (-) rotation power [-1.0, 1.0]
+     */
+    public void driveFieldCentric(double axial, double lateral, double yaw) {
+        double heading = getHeading(AngleUnit.RADIANS);
+
+        // Rotate translational inputs by the inverse of the robot's current heading
+        double rotatedAxial   = axial * Math.cos(-heading) - lateral * Math.sin(-heading);
+        double rotatedLateral = axial * Math.sin(-heading) + lateral * Math.cos(-heading);
+
+        driveRobotCentric(rotatedAxial, rotatedLateral, yaw);
     }
 
     /**

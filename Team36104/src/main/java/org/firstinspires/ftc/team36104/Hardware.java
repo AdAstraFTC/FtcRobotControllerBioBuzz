@@ -95,14 +95,19 @@ public class Hardware {
      * DRIVE METHODS — IMPLEMENT THESE
      * ===================================================== */
 
-    public void driveRobot(double axial, double lateral, double yaw) {
+    public void driveRobotCentric(double axial, double lateral, double yaw) {
         // TODO 8: Calculate power for each wheel using mecanum equations
         // TODO 9: Normalize the four wheel powers
         // TODO 10: Call setDrivePower(...) with the normalized values
     }
 
+    public void driveFieldCentric(double axial, double lateral, double yaw) {
+        // TODO 11: Implement field-centric driving
+        // Hint: Rotate axial and lateral using the robot's current heading (in radians)
+    }
+
     public void setDrivePower(double frontLeft, double frontRight, double backLeft, double backRight) {
-        // TODO 11: Send power to the four motors using Range.clip
+        // TODO 12: Send power to the four motors using Range.clip
     }
 
     public void stopDrive() {
@@ -114,11 +119,11 @@ public class Hardware {
      * ===================================================== */
 
     public void updatePose() {
-        // TODO 12: Call pinpoint.update()
+        // TODO 13: Call pinpoint.update()
     }
 
     public Pose2D getPose() {
-        // TODO 13: Return the current pose from the Pinpoint
+        // TODO 14: Return the current pose from the Pinpoint
         return new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     }
 
@@ -135,16 +140,16 @@ public class Hardware {
     }
 
     public void resetPose() {
-        // TODO 14: Reset the Pinpoint position and IMU
+        // TODO 15: Reset the Pinpoint position and IMU
     }
 
     public boolean isPinpointReady() {
-        // TODO 15: Return whether the Pinpoint is ready
+        // TODO 16: Return whether the Pinpoint is ready
         return false;
     }
 
     public void recalibratePinpoint() {
-        // TODO 16: Trigger a fresh reset + IMU recalibration
+        // TODO 17: Trigger a fresh reset + IMU recalibration
     }
 
     public GoBildaPinpointDriver getPinpoint() {

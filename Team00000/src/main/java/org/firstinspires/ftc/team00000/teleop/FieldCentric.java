@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.team00000.Hardware;
 
-@TeleOp(name = "FieldCentric", group = "OpMode")
+@TeleOp(name = "FieldCentric", group = "TeleOp")
 public class FieldCentric extends OpMode {
 
     private Hardware hardware;

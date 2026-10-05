@@ -33,9 +33,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
  * <p>Provides a clean, reusable interface for controlling four mecanum drive motors
  * and reading pose data from the goBILDA Pinpoint odometry computer.</p>
  *
- * <p>{@link Config} is the single source of truth for drivetrain and Pinpoint wiring.
- * Teleop reads it here; Pedro Pathing autonomous reads the same fields from
- * {@code Constants.createFollower()}.</p>
+ * <p>{@link Config} is the source of truth for teleop drivetrain and Pinpoint wiring.
+ * Pedro Pathing 3 is installed separately under {@code org.firstinspires.ftc.teamcode.pedro}
+ * and uses the same hardware map names as strings.</p>
  *
  * <p>Students and OpModes should interact with this class through its public methods
  * rather than accessing motors or the Pinpoint directly. {@link #getPinpoint()} is an
@@ -44,9 +44,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 public class Hardware {
 
     /**
-     * Robot wiring and Pinpoint geometry. Edit these values — not copies in Pedro
-     * {@code Constants}. Signs follow the official goBILDA Pinpoint sample and the
-     * Pedro Pathing Pinpoint localizer (externally measured).
+     * Robot wiring and Pinpoint geometry for teleop. Signs follow the official
+     * goBILDA Pinpoint sample. Pedro Pathing 3 has its own Constants in
+     * {@code org.firstinspires.ftc.teamcode.pedro}.
      */
     @Configurable
     public static class Config {

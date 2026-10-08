@@ -15,14 +15,15 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.team00000.pedro.Constants;
 
 /**
  * Simple autonomous: drive forward a fixed distance and stop.
  *
  * <p>Uses Pedro Pathing 3's {@link Follower}, which owns the mecanum motors
- * and Pinpoint. Do not also construct {@code Hardware} here. Wiring names
- * come from {@link Constants#create} in {@code org.firstinspires.ftc.teamcode.pedro}.</p>
+ * and Pinpoint. Do not also construct {@code Hardware} here. Wiring comes
+ * from {@link org.firstinspires.ftc.team00000.Hardware.Config} through
+ * {@link Constants#create}.</p>
  *
  * <p>Place the robot with a clear path ahead. Heading 0 is +X from the
  * starting pose (robot-start-relative, not a full field auto).</p>

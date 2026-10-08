@@ -1,4 +1,4 @@
-# TeamCode Guide for Students
+# Team Guide for Students
 
 **From Coach Chris Lemoine**  
 FTC Lead Coach & Programming Mentor  
@@ -58,13 +58,17 @@ Follow these steps the first few times.
 2. Expand: `FtcRobotController > java > org.firstinspires.ftc.robotcontroller > external > samples`
 3. Find the sample you want.
 4. Right-click the `.java` file → **Copy**.
-5. Expand your module: `Team00000 > java > org.firstinspires.ftc.teamcode`
-6. Right-click the `teamcode` folder → **Paste**.
+5. Expand your own team module to its package folder. Examples:
+   - `Team31192 > java > org.firstinspires.ftc.team31192`
+   - `Team36103 > java > org.firstinspires.ftc.team36103`
+   - `Team36104 > java > org.firstinspires.ftc.team36104`
+6. Right-click that team folder → **Paste**. Do not paste into `FtcRobotController`.
 7. Rename the file with a clear name (e.g. `TeleOp_BasicDrive`, `Auto_Park`, `Test_ColorSensor`). Start with a capital letter. No spaces.
-8. If Android Studio offers to refactor, accept it.
+8. If Android Studio offers to update the package, accept it.
 
 **After pasting:**
-- First line must still read `package org.firstinspires.ftc.teamcode;`
+- The first line must match the folder you pasted into, for example `package org.firstinspires.ftc.team31192;`.
+- Samples start as `package org.firstinspires.ftc.robotcontroller.external.samples;`. Change that line to your team package.
 - If you see red error lines: **Build > Clean Project**, then **Build > Rebuild Project**.
 
 **Common Mistakes to Avoid**
@@ -135,7 +139,7 @@ This is not busy work. Judges look for evidence of your **design process, iterat
 
 1. Choose the right sample using the Prefix Table (Section 2).
 2. Copy the `.java` from `FtcRobotController > ... > samples`.
-3. Paste into your `Team00000 > java > ... > teamcode` folder and rename clearly.
+3. Paste into your team package folder (`org.firstinspires.ftc.teamXXXX`) and rename clearly. The `package` line must match that folder.
 4. Edit `@TeleOp(name="Driver-friendly name", group="TeleOp")` and **delete** `@Disabled`.
 5. If red errors appear: Build > Clean Project, then Build > Rebuild Project.
 6. Test on the Driver Station, then complete the Portfolio Checklist (Section 6).

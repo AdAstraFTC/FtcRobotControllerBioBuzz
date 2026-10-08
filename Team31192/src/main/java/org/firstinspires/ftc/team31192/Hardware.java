@@ -34,6 +34,8 @@ public class Hardware {
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
+    private DcMotor intakeMotor = null;
+    private DcMotor kickerMotor = null;
     private GoBildaPinpointDriver pinpoint = null;
 
     /* =====================================================
@@ -46,35 +48,51 @@ public class Hardware {
     public static final String FRONT_RIGHT_NAME = "frontRightDrive";
     public static final String BACK_LEFT_NAME = "backLeftDrive";
     public static final String BACK_RIGHT_NAME = "backRightDrive";
+    public static final String INTAKE_NAME = "intakeMotor";
+    public static final String KICKER_NAME = "kickerMotor";
     public static final String PINPOINT_NAME = "pinpoint";
 
+    public static final DcMotor.Direction INTAKE_DIRECTION = DcMotor.Direction.FORWARD;
+    public static final DcMotor.Direction KICKER_DIRECTION = DcMotor.Direction.REVERSE;
+
+    /** Held power while testing direction. Raise this after the spin direction is confirmed. */
+    public static final double INTAKE_POWER = 0.5;
+    public static final double KICKER_POWER = 0.5;
+
+    public static final DcMotor.Direction FRONT_LEFT_DIRECTION = DcMotor.Direction.REVERSE;
+    public static final DcMotor.Direction FRONT_RIGHT_DIRECTION = DcMotor.Direction.FORWARD;
+    public static final DcMotor.Direction BACK_LEFT_DIRECTION = DcMotor.Direction.REVERSE;
+    public static final DcMotor.Direction BACK_RIGHT_DIRECTION = DcMotor.Direction.FORWARD;
+
     /*
-     * PINPOINT PHYSICAL OFFSETS (in millimeters)
+     * PINPOINT POD OFFSETS (millimeters)
      *
-     * These define the location of the Pinpoint relative to the robots center of rotation.
-     * Positive X = forward from center. Positive Y = left from center (robot's perspective).
+     * These are the odometry pods relative to the center of rotation, not the
+     * Pinpoint computer. Official goBILDA setOffsets(xOffset, yOffset):
+     *   xOffset = how far sideways the FORWARD pod is. Left +, right -.
+     *   yOffset = how far forward the STRAFE pod is. Forward +, back -.
      *
-     * These values MUST be measured on the physical robot after mounting.
-     * Incorrect offsets are one of the most common causes of autonomous inaccuracy.
+     * Pedro reads these same fields. Teleop calls setOffsets with them in this order.
      */
-    private static final double PINPOINT_X_OFFSET_MM = 56.00;
-    private static final double PINPOINT_Y_OFFSET_MM = -153.50;
-    private static final GoBildaOdometryPods PODS = GoBildaOdometryPods.goBILDA_4_BAR_POD;
+    public static final double FORWARD_POD_Y_MM = -153.50;
+    public static final double STRAFE_POD_X_MM = 56.00;
+    public static final GoBildaOdometryPods PODS = GoBildaOdometryPods.goBILDA_4_BAR_POD;
 
     /*
      * ENCODER DIRECTIONS
      *
-     * These frequently need to be tested and adjusted on the actual robot.
-     * Incorrect directions will cause heading or strafe to be inverted.
+     * The forward pod should increase when the robot moves forward.
+     * The strafe pod should increase when the robot moves left.
      */
-    private static final EncoderDirection X_ENCODER_DIRECTION = EncoderDirection.FORWARD;
-    private static final EncoderDirection Y_ENCODER_DIRECTION = EncoderDirection.REVERSED;
+    public static final EncoderDirection FORWARD_ENCODER_DIRECTION = EncoderDirection.FORWARD;
+    public static final EncoderDirection STRAFE_ENCODER_DIRECTION = EncoderDirection.REVERSED;
 
     /* =====================================================
      * CONSTRUCTOR
      * ===================================================== */
     public Hardware(HardwareMap hardwareMap) {
         initDriveMotors(hardwareMap);
+        initIntakeMotors(hardwareMap);
         initPinpoint(hardwareMap);
     }
 
@@ -99,10 +117,10 @@ public class Hardware {
          *   - If the robot drives backward, flip the direction od ALL four motors.
          *   - If strafing is wrong, adjust the left vs right pairs.
          */
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftDrive.setDirection(FRONT_LEFT_DIRECTION);
+        frontRightDrive.setDirection(FRONT_RIGHT_DIRECTION);
+        backLeftDrive.setDirection(BACK_LEFT_DIRECTION);
+        backRightDrive.setDirection(BACK_RIGHT_DIRECTION);
 
         // Brake is more predictable than coast when using odometry for positioning.
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -116,13 +134,27 @@ public class Hardware {
         backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+    private void initIntakeMotors (HardwareMap hardwareMap) {
+        intakeMotor = hardwareMap.get(DcMotor.class, INTAKE_NAME);
+        kickerMotor = hardwareMap.get(DcMotor.class, KICKER_NAME);
+
+        intakeMotor.setDirection(INTAKE_DIRECTION);
+        kickerMotor.setDirection(KICKER_DIRECTION);
+
+        // Coast if a piece jams the roller. Brake so the kicker stops when the trigger is released.
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        kickerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        kickerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
     private void initPinpoint (HardwareMap hardwareMap) {
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, PINPOINT_NAME);
 
-        pinpoint.setOffsets(PINPOINT_X_OFFSET_MM, PINPOINT_Y_OFFSET_MM, DistanceUnit.MM);
+        pinpoint.setOffsets(FORWARD_POD_Y_MM, STRAFE_POD_X_MM, DistanceUnit.MM);
         pinpoint.setEncoderResolution(PODS);
-        pinpoint.setEncoderDirections(X_ENCODER_DIRECTION, Y_ENCODER_DIRECTION);
+        pinpoint.setEncoderDirections(FORWARD_ENCODER_DIRECTION, STRAFE_ENCODER_DIRECTION);
 
         /*
          * Reset position and IMU at the start of every match / OpMode.
@@ -208,6 +240,51 @@ public class Hardware {
     }
 
     /* =====================================================
+     * PUBLIC INTAKE API
+     * ===================================================== */
+
+    /**
+     * Positive power collects. Negative power ejects.
+     * The OpMode decides the sign. This method only applies power.
+     */
+    public void setIntakePower(double power) {
+        intakeMotor.setPower(Range.clip(power, -1.0, 1.0));
+    }
+
+    /**
+     * Positive power kicks the piece out. Negative power runs the kicker backward.
+     */
+    public void setKickerPower(double power) {
+        kickerMotor.setPower(Range.clip(power, -1.0, 1.0));
+    }
+
+    /**
+     * Collect wins over eject. Kick wins over kick-reverse.
+     * Each requested motor runs at its fixed power while the button is held.
+     */
+    public void runIntake(boolean collect, boolean eject, boolean kick, boolean kickReverse) {
+        double intakePower = 0.0;
+        if (collect) {
+            intakePower = INTAKE_POWER;
+        } else if (eject) {
+            intakePower = -INTAKE_POWER;
+        }
+        double kickerPower = 0.0;
+        if (kick) {
+            kickerPower = KICKER_POWER;
+        } else if (kickReverse) {
+            kickerPower = -KICKER_POWER;
+        }
+        setIntakePower(intakePower);
+        setKickerPower(kickerPower);
+    }
+
+    public void stopIntake() {
+        setIntakePower(0.0);
+        setKickerPower(0.0);
+    }
+
+    /* =====================================================
      * PUBLIC ODOMETRY / PINPOINT API
      * ===================================================== */
 
@@ -283,6 +360,11 @@ public class Hardware {
     /* =====================================================
      * TELEMETRY HELPERS
      * ===================================================== */
+
+    public void addIntakeTelemetry(org.firstinspires.ftc.robotcore.external.Telemetry telemetry) {
+        telemetry.addData("Intake", "%.2f", intakeMotor.getPower());
+        telemetry.addData("Kicker", "%.2f", kickerMotor.getPower());
+    }
 
     public void addDriveTelemetry(org.firstinspires.ftc.robotcore.external.Telemetry telemetry) {
         telemetry.addData("Drive", "FL %.2f FR %.2f BL %.2f BR %.2f",

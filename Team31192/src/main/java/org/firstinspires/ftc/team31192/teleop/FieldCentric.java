@@ -27,11 +27,26 @@ public class FieldCentric extends OpMode {
         double yaw     =  gamepad1.right_stick_x;
 
         hardware.driveFieldCentric(axial, lateral, yaw);
+        runIntake();
 
         // Telemetry
         hardware.addDriveTelemetry(telemetry);
+        hardware.addIntakeTelemetry(telemetry);
         hardware.addPoseTelemetry(telemetry, DistanceUnit.MM, AngleUnit.DEGREES);
         telemetry.addData("Mode", "Field Centric");
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        hardware.stopIntake();
+    }
+
+    private void runIntake() {
+        hardware.runIntake(
+                gamepad2.right_bumper,
+                gamepad2.left_bumper,
+                gamepad2.a,
+                gamepad2.b);
     }
 }

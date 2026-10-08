@@ -25,11 +25,12 @@ The easiest way to create your own OpMode is to copy a Sample and make it your o
 1. In Android Studio, switch to **Project** view.
 2. Expand: `FtcRobotController > java > ... > external > samples`
 3. Right-click the sample `.java` file you want → **Copy**.
-4. Expand your module: `Team36104 > java > org.firstinspires.ftc.teamcode`
-5. Right-click the `teamcode` folder → **Paste**.
+4. Expand your module: `Team36104 > java > org.firstinspires.ftc.team36104`
+5. Right-click the `team36104` folder → **Paste**.
 6. Give it a clear name (e.g. `TeleOp_TankDrive`, `Auto_Park`, `Test_ColorSensor`).
-7. Update the `@TeleOp` line and remove `@Disabled` (see below).
-8. If you see red errors: **Build > Clean Project**, then **Build > Rebuild Project**.
+7. Set the first line to `package org.firstinspires.ftc.team36104;`. If Android Studio offers to update the package, accept it.
+8. Update the `@TeleOp` line and remove `@Disabled` (see below).
+9. If you see red errors: **Build > Clean Project**, then **Build > Rebuild Project**.
 
 ## Making Your OpMode Appear on the Driver Station
 

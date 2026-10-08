@@ -32,6 +32,11 @@ public class Hardware {
     public static final String BACK_RIGHT_NAME = "backRightDrive";
     public static final String IMU_NAME = "imu";
 
+    public static final DcMotor.Direction FRONT_LEFT_DIRECTION = DcMotor.Direction.REVERSE;
+    public static final DcMotor.Direction FRONT_RIGHT_DIRECTION = DcMotor.Direction.FORWARD;
+    public static final DcMotor.Direction BACK_LEFT_DIRECTION = DcMotor.Direction.REVERSE;
+    public static final DcMotor.Direction BACK_RIGHT_DIRECTION = DcMotor.Direction.REVERSE;
+
     /*
      * REV HUB ORIENTATION ON THE ROBOT
      *
@@ -79,10 +84,10 @@ public class Hardware {
          *   - If the robot drives backward, flip the direction od ALL four motors.
          *   - If strafing is wrong, adjust the left vs right pairs.
          */
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftDrive.setDirection(FRONT_LEFT_DIRECTION);
+        frontRightDrive.setDirection(FRONT_RIGHT_DIRECTION);
+        backLeftDrive.setDirection(BACK_LEFT_DIRECTION);
+        backRightDrive.setDirection(BACK_RIGHT_DIRECTION);
 
         // Brake is more predictable than coast when holding heading or stopping for turns.
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

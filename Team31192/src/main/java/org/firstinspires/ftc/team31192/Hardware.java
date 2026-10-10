@@ -17,6 +17,7 @@ package org.firstinspires.ftc.team31192;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.EncoderDirection;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.GoBildaOdometryPods;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
@@ -36,6 +37,8 @@ public class Hardware {
     private DcMotor backRightDrive = null;
     private DcMotor intakeMotor = null;
     private DcMotor kickerMotor = null;
+    private DcMotor flywheelMotor = null;
+    private Servo launcherSpine = null;
     private GoBildaPinpointDriver pinpoint = null;
 
     /* =====================================================
@@ -50,14 +53,20 @@ public class Hardware {
     public static final String BACK_RIGHT_NAME = "backRightDrive";
     public static final String INTAKE_NAME = "intakeMotor";
     public static final String KICKER_NAME = "kickerMotor";
+    public static final String FLYWHEEL_NAME = "flywheelMotor";
+    public static final String LAUNCHER_SPINE_NAME = "launcherSpine";
     public static final String PINPOINT_NAME = "pinpoint";
 
     public static final DcMotor.Direction INTAKE_DIRECTION = DcMotor.Direction.FORWARD;
     public static final DcMotor.Direction KICKER_DIRECTION = DcMotor.Direction.REVERSE;
+    public static final DcMotor.Direction FLYWHEEL_DIRECTION = DcMotor.Direction.FORWARD;
 
     /** Held power while testing direction. Raise this after the spin direction is confirmed. */
     public static final double INTAKE_POWER = 0.5;
     public static final double KICKER_POWER = 0.5;
+    public static final double FLYWHEEL_POWER = 0.5;
+    public static final double SPINE_POLLEN_POSITION = 0.5;
+    public static final double SPINE_NECTAR_POSITION = 0.0;
 
     public static final DcMotor.Direction FRONT_LEFT_DIRECTION = DcMotor.Direction.REVERSE;
     public static final DcMotor.Direction FRONT_RIGHT_DIRECTION = DcMotor.Direction.FORWARD;
@@ -93,6 +102,8 @@ public class Hardware {
     public Hardware(HardwareMap hardwareMap) {
         initDriveMotors(hardwareMap);
         initIntakeMotors(hardwareMap);
+        initFlywheelMotors(hardwareMap);
+        initLauncherSpine(hardwareMap);
         initPinpoint(hardwareMap);
     }
 
@@ -147,6 +158,17 @@ public class Hardware {
 
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         kickerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    private void initFlywheelMotors (HardwareMap hardwareMap) {
+        flywheelMotor = hardwareMap.get(DcMotor.class, FLYWHEEL_NAME);
+        flywheelMotor.setDirection(FLYWHEEL_DIRECTION);
+        flywheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        flywheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    private void initLauncherSpine (HardwareMap hardwareMap) {
+        launcherSpine = hardwareMap.get(Servo.class, LAUNCHER_SPINE_NAME);
+        launcherSpine.setPosition(SPINE_POLLEN_POSITION);
     }
 
     private void initPinpoint (HardwareMap hardwareMap) {
@@ -284,6 +306,38 @@ public class Hardware {
         setKickerPower(0.0);
     }
 
+    public void setFlywheelPower(double power) {flywheelMotor.setPower(Range.clip(power, -1.0, 1.0));}
+
+    public void runFlywheel(boolean hiveLaunch, boolean flowerLaunch, boolean fixJam) {
+        double flywheelPower = 0.0;
+        if (hiveLaunch) {
+            flywheelPower = FLYWHEEL_POWER;
+        } else if (flowerLaunch) {
+            flywheelPower = 0.5 * FLYWHEEL_POWER;
+        } else if (fixJam) {
+            flywheelPower = -FLYWHEEL_POWER;
+        }
+        setFlywheelPower(flywheelPower);
+    }
+
+    public void stopFlywheel() {
+        setFlywheelPower(0.0);
+    }
+
+    public void setLauncherSpinePosition(double position) {
+        launcherSpine.setPosition(Range.clip(position, 0.0, 1.0));
+    }
+
+    /**
+     * Nectar wins over pollen. Releasing both buttons leaves the servo at its last position.
+     */
+    public void runLauncherSpine(boolean nectar, boolean pollen) {
+        if (nectar) {
+            setLauncherSpinePosition(SPINE_NECTAR_POSITION);
+        } else if (pollen) {
+            setLauncherSpinePosition(SPINE_POLLEN_POSITION);
+        }
+    }
     /* =====================================================
      * PUBLIC ODOMETRY / PINPOINT API
      * ===================================================== */
@@ -364,6 +418,8 @@ public class Hardware {
     public void addIntakeTelemetry(org.firstinspires.ftc.robotcore.external.Telemetry telemetry) {
         telemetry.addData("Intake", "%.2f", intakeMotor.getPower());
         telemetry.addData("Kicker", "%.2f", kickerMotor.getPower());
+        telemetry.addData("Flywheel", "%.2f", flywheelMotor.getPower());
+        telemetry.addData("Spine", "%.2f", launcherSpine.getPosition());
     }
 
     public void addDriveTelemetry(org.firstinspires.ftc.robotcore.external.Telemetry telemetry) {

@@ -28,6 +28,8 @@ public class FieldCentric extends OpMode {
 
         hardware.driveFieldCentric(axial, lateral, yaw);
         runIntake();
+        runFlywheel();
+        runLauncherSpine();
 
         // Telemetry
         hardware.addDriveTelemetry(telemetry);
@@ -40,6 +42,7 @@ public class FieldCentric extends OpMode {
     @Override
     public void stop() {
         hardware.stopIntake();
+        hardware.stopFlywheel();
     }
 
     private void runIntake() {
@@ -48,5 +51,20 @@ public class FieldCentric extends OpMode {
                 gamepad2.left_bumper,
                 gamepad2.a,
                 gamepad2.b);
+    }
+
+    /** Gamepad 2: Y full power, X half power, dpad down reverse. Hive wins, then flower, then jam. */
+    private void runFlywheel() {
+        hardware.runFlywheel(
+                gamepad2.y,
+                gamepad2.x,
+                gamepad2.dpad_down);
+    }
+
+    /** Gamepad 2: dpad up nectar, dpad left pollen. Nectar wins. Releasing both holds position. */
+    private void runLauncherSpine() {
+        hardware.runLauncherSpine(
+                gamepad2.dpad_up,
+                gamepad2.dpad_left);
     }
 }
